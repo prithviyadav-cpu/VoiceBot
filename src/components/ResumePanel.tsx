@@ -94,9 +94,12 @@ export function ResumePanel({ open, onClose, onAsk }: Props) {
                   <section key={org}>
                     <SectionLabel>
                       {org}
-                      <span className="ml-2 normal-case tracking-normal text-slate-600">
-                        {items[0].period}
-                      </span>
+                      {items[0].period !== 'Personal' && (
+                        <span className="font-normal normal-case tracking-normal text-slate-600">
+                          {'  · '}
+                          {items[0].period}
+                        </span>
+                      )}
                     </SectionLabel>
                     <div className="grid gap-4 sm:grid-cols-2">
                       {items.map((project) => (
