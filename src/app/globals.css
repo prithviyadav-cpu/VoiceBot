@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-ink-950 text-slate-200 antialiased;
+    /* Layered radial washes give the flat background depth without an image. */
+    background-image:
+      radial-gradient(60rem 40rem at 12% -10%, rgb(76 29 149 / 0.42), transparent 60%),
+      radial-gradient(48rem 34rem at 88% 4%, rgb(14 116 144 / 0.34), transparent 62%),
+      radial-gradient(52rem 40rem at 50% 108%, rgb(232 121 249 / 0.16), transparent 66%);
+    background-attachment: fixed;
+  }
+
+  /* Visible, on-brand focus ring for keyboard users only. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-aurora-cyan/70 ring-offset-2 ring-offset-ink-950;
+  }
+
+  ::selection {
+    @apply bg-aurora-violet/40 text-white;
+  }
+}
+
+@layer components {
+  /* Frosted panel: the base surface for every card in the app. */
+  .glass {
+    @apply relative rounded-3xl border border-white/10 bg-white/[0.045] shadow-lift shadow-inner-hairline backdrop-blur-xl;
+  }
+
+  /* Gradient hairline border, drawn as a masked ring so it sits above blur. */
+  .glass-edge::before {
+    content: '';
+    @apply pointer-events-none absolute inset-0 rounded-[inherit] p-px;
+    background: linear-gradient(
+      140deg,
+      rgb(34 211 238 / 0.55),
+      rgb(139 92 246 / 0.28) 42%,
+      transparent 70%
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-br from-white via-slate-200 to-slate-400 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-accent {
+    @apply bg-gradient-to-r from-aurora-cyan via-aurora-violet to-aurora-magenta bg-clip-text text-transparent;
+  }
+
+  /* Scrollbar styled to disappear into the dark surface. */
+  .scroll-subtle {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(148 163 184 / 0.3) transparent;
+  }
+  .scroll-subtle::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scroll-subtle::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-400/25;
+  }
+  .scroll-subtle::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400/40;
+  }
+  .scroll-subtle::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  /* 3D card tilt primitives used by the resume panel. */
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+}
+
+/* Respect the OS reduced-motion setting: kill decorative animation only. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
